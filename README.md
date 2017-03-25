@@ -7,7 +7,7 @@
 
 To get started with Unsplash Bulk Downloader, simply clone the repo, install the modules with npm and run `node index`
 
-Here are some of the commands available:
+Here are some of the available options:
 
 ```
 Usage: index [options]
