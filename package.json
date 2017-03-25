@@ -1,0 +1,42 @@
+{
+  "name": "unsplash-bulk-downloader",
+  "version": "1.0.0",
+  "description": "A simple command line tool that lets you bulk download images from Unsplash",
+  "main": "main.js",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "nodeJs-zip": "^1.0.4",
+    "path": "^0.12.7",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "nodeJs-zip": "^1.0.4",
+    "progress": "^1.1.8",
+    "zip-folder": "^1.0.0"
+  },
+  "scripts": {
+    "test": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MehediH/UnsplashBulkDownloader.git"
+  },
+  "keywords": [
+    "unsplash",
+    "unsplash",
+    "bulk",
+    "unsplash",
+    "bulk",
+    "downloader",
+    "stock",
+    "images"
+  ],
+  "author": "Mehedi Hassan",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/MehediH/UnsplashBulkDownloader/issues"
+  },
+  "homepage": "https://github.com/MehediH/UnsplashBulkDownloader#readme"
+}
