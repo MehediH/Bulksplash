@@ -27,7 +27,10 @@ if(!program.orientation){
     program.orientation= "landscape"
 }
 
-console.log("Downloading " + program.amount + " random images :)")
+console.log("\nWelcome to Bulksplash! (Powered by Unsplash.com)")
+
+console.log("\nDownloading " + program.amount + " random images :)")
+
 var ProgressBar = require('progress');
 var bar = new ProgressBar(':bar', { total: parseInt(program.amount) });
 
@@ -59,6 +62,7 @@ if(program.search){
     var url = url + "&query=" + program.search;
 }
 
+console.log("\nDownloading images from:\n")
 request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
         var body = JSON.parse(body);
@@ -71,6 +75,7 @@ request(url, (error, response, body) => {
                 var img = body[i]["urls"].raw
             }
 
+            console.log(body[i]["user"].name + " (" + body[i]["user"].links["html"] + ")")
             download(img, path.join(__dirname, "/" + program.folder + "/image-" + i + ".jpg"), program.folder)
         }
 
