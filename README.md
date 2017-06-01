@@ -31,7 +31,7 @@ Usage: index [options]
     --height [h]       Height of images (Default is 800)
     --featured [f]     Download featured images only
     --search [s]       Download images with a specific term
-    --orientation [o]  Image orientation (landscape, portrait, and squarish
+    --orientation [o]  Image orientation (landscape, portrait, and squarish)
 ````
 
 ---

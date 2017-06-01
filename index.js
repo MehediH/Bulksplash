@@ -12,7 +12,7 @@ program
   .option('--height [h]', 'Height of images (Default is 800)')
   .option('--featured [f]', 'Download featured images only')
   .option('--search [s]', 'Download images with a specific term')
-  .option('--orientation [o]', 'Image orientation (landscape, portrait, and squarish')
+  .option('--orientation [o]', 'Image orientation (landscape, portrait, and squarish)')
   .parse(process.argv);
 
 if(!program.amount){
