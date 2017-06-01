@@ -2,7 +2,7 @@
 
 ### A simple command line tool that lets you bulk download images from Unsplash, previously known as Unsplash Bulk Downloader
 
-![screenshot](http://i.imgur.com/E0NXUQp.jpg)
+![screenshot](http://i.imgur.com/uK9pqbW.jpg)
 
 ## What's New
 
