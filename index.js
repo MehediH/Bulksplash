@@ -45,6 +45,8 @@ function download(url, dest, dirname) {
     var request = https.get(url, function(response) {
         response.pipe(file);
         bar.tick();
+    }).on("error", function (e) {
+        console.log("Error while downloading", url, e.code);
     });
 };
 
