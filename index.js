@@ -53,7 +53,7 @@ function download(url, dest, dirname) {
 var url = "https://api.unsplash.com/photos/random?count=" + program.amount + "&orientation=" + program.orientation + "&client_id=1ced621f3ac7bb7836fc9b6bfbcff5656dd43eb2b60f4636e5ef53142ea19f2d";
 
 if(program.width){
-    var url = url + "&h=" + program.width;
+    var url = url + "&w=" + program.width;
 }
 
 if(program.height){
