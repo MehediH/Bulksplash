@@ -35,9 +35,13 @@ const questions = {
   },
 
   featured: {
-    type: 'confirm',
+    type: 'list',
     name: 'featured',
     message: 'Only featured images?',
+    choices: ['YES', 'no', ],
+    filter: function(val) {
+      return val === 'YES'
+    },
     default: DEFAULTS.featured,
   },
 
@@ -45,7 +49,7 @@ const questions = {
     type: 'list',
     name: 'orientation',
     message: 'What orientation?',
-    choices: ['Portrait', 'Landscape', 'Squarish', 'Custom',],
+    choices: ['Portrait', 'Landscape', 'Squarish', 'Custom',],//todo: mixed
     filter: function(val) {
       return val.toLowerCase()
     },
