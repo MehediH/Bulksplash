@@ -34,6 +34,9 @@ Usage: index [options]
     --orientation [o]  Image orientation (landscape, portrait, and squarish)
 ````
 
+E.g.
+`node index --amount=20 --featured --search="party"`
+
 ---
 
 Please feel free to contribute to this tiny project and make it better :)

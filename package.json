@@ -4,21 +4,20 @@
   "description": "A simple command line tool that lets you bulk download images from Unsplash",
   "main": "main.js",
   "dependencies": {
-    "commander": "^2.9.0",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
+    "inquirer": "^5.1.0",
     "nodeJs-zip": "^1.0.4",
     "path": "^0.12.7",
-    "request": "^2.81.0",
-    "unsplash-js": "^4.6.0"
+    "progress": "^1.1.8",
+    "request": "^2.81.0"
   },
   "devDependencies": {
-    "nodeJs-zip": "^1.0.4",
-    "progress": "^1.1.8",
-    "zip-folder": "^1.0.0"
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.6.1"
   },
   "scripts": {
-    "test": "node main.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
