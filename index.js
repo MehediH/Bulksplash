@@ -57,7 +57,7 @@ const randomHash = () => {
     total: options.amount,
   })
 
-  const download = (imageUrl, dest, dirname) => {
+  const download = ({ imageUrl, dest, dirname, }) => {
     const dir = `./${dirname}`
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
@@ -67,6 +67,9 @@ const randomHash = () => {
     https.get(imageUrl, response => {
       response.pipe(file)
       bar.tick()
+      if (bar.complete) {
+        console.log('\nDone\n')
+      }
     }).on('error', function (e) {
       console.log('Error while downloading', imageUrl, e.code)
     })
@@ -80,12 +83,11 @@ const randomHash = () => {
         const img = options.width || options.height ? body[i].urls.custom : body[i].urls.raw
 
         console.log(`${body[i].user.name} (${body[i].user.links.html})`)
-        download(
-          img,
-          path.join(__dirname, `/${options.folder}/image-${randomHash()}.jpg`),
-          options.folder,
-          options.amount
-        )
+        download({
+          imageUrl: img,
+          dest: path.join(__dirname, `/${options.folder}/image-${randomHash()}.jpg`),
+          dirname: options.folder,
+        })
       }
 
     } else {
