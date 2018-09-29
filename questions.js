@@ -2,7 +2,6 @@ const DEFAULTS = {
   amount: 20,
   search: '',
   featured: true,
-  orientation: 'landscape',
   width: 1200,
   height: 800,
 }
@@ -23,6 +22,9 @@ const questions = {
       }
 
       return 'Please enter a number between 0 and 50'
+    },
+    filter: function(val) {
+      return parseInt(val, 10)
     },
     default: DEFAULTS.amount,
   },
@@ -49,11 +51,10 @@ const questions = {
     type: 'list',
     name: 'orientation',
     message: 'What orientation?',
-    choices: ['Portrait', 'Landscape', 'Squarish', 'Custom',],//todo: mixed
+    choices: ['Mixed', 'Portrait', 'Landscape', 'Squarish', 'Custom',],//todo: mixed
     filter: function(val) {
       return val.toLowerCase()
     },
-    default: DEFAULTS.orientation,
   },
 
   width: {

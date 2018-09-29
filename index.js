@@ -29,31 +29,12 @@ const randomHash = () => {
       )
       options.height = answers.height
     }
+    if (options.orientation === 'mixed') {
+      delete options.orientation
+    }
     return options
   }
-
-  const download = (url, dest, dirname, total) => {
-    const dir = `./${dirname}`
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir)
-    }
-
-    const bar = new ProgressBar(':bar', {
-      total: total,
-    })
-
-    const file = fs.createWriteStream(dest)
-    https.get(url, function (response) {
-      response.pipe(file)
-      //TODO: tick isn't working?
-      bar.tick()
-      if (bar.complete) {
-        console.log('\ncomplete\n')
-      }
-    }).on('error', function (e) {
-      console.log('Error while downloading', url, e.code)
-    })
-  }
+  await ask()
 
   const buildUrl = ({ featured, orientation, search, width, height, amount, }) => {
     const base = 'https://api.unsplash.com/photos/random?'
@@ -66,17 +47,31 @@ const randomHash = () => {
     const h = height ? `&h=${height}` : ''
     return `${base}${a}${o}${f}${w}${h}${s}${clientId}`
   }
-
-  await ask()
-  console.log(JSON.stringify(options, null, '  '))
-
-  console.log('\nWelcome to Bulksplash! (Powered by Unsplash.com)')
-
-  console.log(`\nDownloading ${options.amount}${options.featured ? ' featured' : ''} images :)`)
-
   const url = buildUrl(options)
 
+  console.log('\nWelcome to Bulksplash! (Powered by Unsplash.com)')
+  console.log(`\nDownloading ${options.amount}${options.featured ? ' featured' : ''} images :)`)
   console.log('\nDownloading images from:\n')
+
+  const bar = new ProgressBar(':bar', {
+    total: options.amount,
+  })
+
+  const download = (imageUrl, dest, dirname) => {
+    const dir = `./${dirname}`
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir)
+    }
+
+    const file = fs.createWriteStream(dest)
+    https.get(imageUrl, response => {
+      response.pipe(file)
+      bar.tick()
+    }).on('error', function (e) {
+      console.log('Error while downloading', imageUrl, e.code)
+    })
+  }
+
   request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       body = JSON.parse(body)
@@ -85,7 +80,12 @@ const randomHash = () => {
         const img = options.width || options.height ? body[i].urls.custom : body[i].urls.raw
 
         console.log(`${body[i].user.name} (${body[i].user.links.html})`)
-        download(img, path.join(__dirname, `/${options.folder}/image-${randomHash()}.jpg`), options.folder, options.amount)
+        download(
+          img,
+          path.join(__dirname, `/${options.folder}/image-${randomHash()}.jpg`),
+          options.folder,
+          options.amount
+        )
       }
 
     } else {
