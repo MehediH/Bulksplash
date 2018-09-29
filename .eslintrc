@@ -17,7 +17,7 @@
       "wrap-iife": ["error", "any"],
       "camelcase": "error",
       "comma-dangle": ["warn", "always"],
-      "complexity": ["warn", { "max": 8 }],
+      "complexity": ["warn", { "max": 15 }],
       "comma-style": ["error", "last"],
       "consistent-return": "off",
       "curly": "error",
