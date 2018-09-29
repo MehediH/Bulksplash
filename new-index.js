@@ -67,19 +67,20 @@ const questions = [
   },
 ]
 
-const options = {}
 
-inquirer.prompt(questions).then(answers => {
-  for (let a in answers) {
-    options[a] = answers[a]
-  }
-  options.folder = `images/${answers.search ?
-    answers.search :
-    'random'}`
-}).then(() => {
+const ask = async () => {
+  const options = {}
+  await inquirer.prompt(questions).then(answers => {
+    for (let a in answers) {
+      options[a] = answers[a]
+    }
+    options.folder = `images/${answers.search ?
+      answers.search :
+      'random'}`
+  })
   if (options.orientation === 'custom') {
     delete options.custom
-    inquirer.prompt(
+    const answers = await inquirer.prompt(
       {
         type: 'input',
         name: 'height',
@@ -87,8 +88,8 @@ inquirer.prompt(questions).then(answers => {
         validate: function (value) {
           value = parseInt(value, 10)
           const pass = typeof value === 'number' &&
-          value > 0 &&
-          value === parseInt(value.toFixed(), 10)
+            value > 0 &&
+            value === parseInt(value.toFixed(), 10)
           if (pass) {
             return true
           }
@@ -100,9 +101,11 @@ inquirer.prompt(questions).then(answers => {
         },
       },
     )
+    options.height = answers.height
   }
-// }).then(answers => {
-//   options.height = answers.height
-}).then(() => {
+  // }).then(answers => {
+  //   options.height = answers.height
   console.log(JSON.stringify(options, null, '  '))
-})
+}
+
+ask()
