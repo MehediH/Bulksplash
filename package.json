@@ -4,7 +4,9 @@
   "description": "A simple command line tool that lets you bulk download images from Unsplash",
   "main": "main.js",
   "dependencies": {
+    "babel-eslint": "^10.0.1",
     "commander": "^2.9.0",
+    "eslint": "^5.6.1",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "inquirer": "^5.1.0",
