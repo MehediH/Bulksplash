@@ -15,7 +15,7 @@ const requiredQuestions = {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
       value > 0 &&
-      value < 50 &&
+      value <= 50 &&
       value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
