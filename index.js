@@ -5,6 +5,11 @@ const path = require('path')
 const ProgressBar = require('progress')
 const inquirer = require('inquirer')
 const { firstQuestions, nextQuestions, } = require('./questions')
+var imageDir = './images';
+
+if (!fs.existsSync(imageDir)){
+    fs.mkdirSync(imageDir);
+}
 
 ;(async () => {
 
