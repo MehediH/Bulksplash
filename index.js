@@ -81,7 +81,7 @@ const { firstQuestions, nextQuestions, } = require('./questions')
   const download = ({ imageUrl, dest, dirname, }) => {
     const dir = `./${dirname}`
     if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir)
+      fs.mkdirSync(dir,{recursive : true})
     }
 
     const file = fs.createWriteStream(dest)
