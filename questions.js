@@ -1,5 +1,5 @@
 const DEFAULTS = {
-  amount: 20,
+  amount: 61,
   search: null,
   featured: true,
   width: 2400,
@@ -15,7 +15,7 @@ const requiredQuestions = {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
       value > 0 &&
-      value < 50 &&
+      value < 150 &&
       value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
