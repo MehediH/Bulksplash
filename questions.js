@@ -10,7 +10,7 @@ const requiredQuestions = {
   amount: {
     type: 'input',
     name: 'amount',
-    message: 'How many images (default 30)?',
+    message: 'How many images (default: 30)?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&

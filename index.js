@@ -126,8 +126,6 @@ const { firstQuestions, nextQuestions, } = require('./questions')
               total: progressBarSize,
             })
 
-            console.log("RAW ->>>> ", body)
-
             Object.values(body).forEach((v, idx) => {
 
 
