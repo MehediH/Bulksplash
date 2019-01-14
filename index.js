@@ -76,12 +76,10 @@ const { firstQuestions, nextQuestions, } = require('./questions')
     console.log(`\nDownloading ${options.amount}${options.featured ? ' featured' : ''}${options.search ? ' "' + options.search + '"' : ''} images :)`)
     console.log('\nDownloading images from:\n')
 
-    const bar = new ProgressBar(':bar', {
-      total: options.amount,
-    })
 
-    const download = ({ imageUrl, dest, dirname, }) => {
+    const download = ({ bar, imageUrl, dest, dirname, }) => {
       return new Promise((resolve, reject) => {
+
         const dir = `./${dirname}`
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir, { recursive: true })
@@ -99,7 +97,7 @@ const { firstQuestions, nextQuestions, } = require('./questions')
           response.pipe(file)
             .on('close', () => {
               // console.log("Completed!")
-          bar.tick()              
+              bar.tick()
               return resolve(`File from ${imageUrl} downloaded.`)
             })
         }).on('error', function (e) {
@@ -112,7 +110,7 @@ const { firstQuestions, nextQuestions, } = require('./questions')
     }
 
     //this
-    const makeRequestCall = (url) => {
+    const makeRequestCall = (progressBarSize, url) => {
       return new Promise((resolve, reject) => {
 
         console.log(`url : ${url}`)
@@ -122,6 +120,9 @@ const { firstQuestions, nextQuestions, } = require('./questions')
             body = JSON.parse(body)
 
             var arrayOfPromises = []
+            const bar = new ProgressBar('[:percent Done] :bar', {
+              total: progressBarSize,
+            })
 
             Object.values(body).forEach(v => {
               const img = options.width || options.height ? v.urls.custom : v.urls.raw
@@ -130,6 +131,8 @@ const { firstQuestions, nextQuestions, } = require('./questions')
               // console.log(`${img}`)
 
               arrayOfPromises.push(download({
+                bar,
+                // progressBarSize,
                 imageUrl: img,
                 dest: path.join(__dirname, `/${options.folder}/image-${v.user.username}-${v.id}.jpg`),
                 dirname: options.folder,
@@ -154,7 +157,7 @@ const { firstQuestions, nextQuestions, } = require('./questions')
 
     // the api only serves 30 files in a page...
     if (options.amount <= 30) {
-      makeRequestCall(url)
+      makeRequestCall(options.amount, url)
     }
     else {
 
@@ -170,14 +173,14 @@ const { firstQuestions, nextQuestions, } = require('./questions')
 
             try {
               // console.log(`ccccccccccccccccc ->>> ${JSON.stringify(options,2)}`)
-              await makeRequestCall(buildUrl(Object.assign(options, { page: i, amount: 30 })))
+              await makeRequestCall(30, buildUrl(Object.assign(options, { page: i, amount: 30 })))
             }
             catch (err) {
               console.error(`Some error : ${err}`)
             }
           }
 
-          remainder ? await makeRequestCall(buildUrl(Object.assign(options, { amount: remainder }))) : null
+          remainder ? await makeRequestCall(remainder, buildUrl(Object.assign(options, { amount: remainder }))) : null
 
           console.log(`Completed ${options.amount} downloads.... check the folder`)
 
