@@ -130,8 +130,6 @@ var gettingLessThanAskedFromAPIFlag = false
 
             // console.log("body ->>>> ", body)
 
-            body.length < 
-
             Object.values(body).forEach(v => {
               const img = options.width || options.height ? v.urls.custom : v.urls.raw
 
