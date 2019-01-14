@@ -6,6 +6,7 @@ const ProgressBar = require('progress')
 const inquirer = require('inquirer')
 const { firstQuestions, nextQuestions, } = require('./questions')
 
+var gettingLessThanAskedFromAPIFlag = false
 
   ; (async () => {
 
@@ -115,6 +116,9 @@ const { firstQuestions, nextQuestions, } = require('./questions')
 
         console.log(`url : ${url}`)
         request(url, (error, response, body) => {
+
+          if (error) console.error(error)
+
           console.log(`${error}, ${response.statusCode}`)
           if (!error && response.statusCode === 200) {
             body = JSON.parse(body)
@@ -123,6 +127,10 @@ const { firstQuestions, nextQuestions, } = require('./questions')
             const bar = new ProgressBar('[:percent Done] :bar', {
               total: progressBarSize,
             })
+
+            // console.log("body ->>>> ", body)
+
+            body.length < 
 
             Object.values(body).forEach(v => {
               const img = options.width || options.height ? v.urls.custom : v.urls.raw
@@ -158,6 +166,12 @@ const { firstQuestions, nextQuestions, } = require('./questions')
     // the api only serves 30 files in a page...
     if (options.amount <= 30) {
       makeRequestCall(options.amount, url)
+        .then(() => {
+          console.log(`Completed downloading ${options.amount} images.... check the /images folder`)
+        })
+        .catch((err) => {
+          console.log(`Some error : ${err}`)
+        })
     }
     else {
 
@@ -182,7 +196,7 @@ const { firstQuestions, nextQuestions, } = require('./questions')
 
           remainder ? await makeRequestCall(remainder, buildUrl(Object.assign(options, { amount: remainder }))) : null
 
-          console.log(`Completed ${options.amount} downloads.... check the folder`)
+          console.log(`Completed ${options.amount} downloads.... check the /images folder`)
 
         })()
 

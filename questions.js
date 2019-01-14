@@ -1,5 +1,5 @@
 const DEFAULTS = {
-  amount: 61,
+  amount: 30,
   search: null,
   featured: true,
   width: 2400,
@@ -10,12 +10,11 @@ const requiredQuestions = {
   amount: {
     type: 'input',
     name: 'amount',
-    message: 'How many images (up to 50)?',
+    message: 'How many images (default 30)?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
       value > 0 &&
-      value < 150 &&
       value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
