@@ -6,8 +6,6 @@ const ProgressBar = require('progress')
 const inquirer = require('inquirer')
 const { firstQuestions, nextQuestions, } = require('./questions')
 
-var gettingLessThanAskedFromAPIFlag = false
-
   ; (async () => {
 
     const options = {}
@@ -70,7 +68,7 @@ var gettingLessThanAskedFromAPIFlag = false
       const p = page ? `&page=${page}` : ''
       return `${base}${a}${o}${f}${w}${h}${p}${s}${clientId}`
     }
-    const url = buildUrl(options)
+    // const url = buildUrl(options)
 
     console.log('\nWelcome to Bulksplash! (Powered by Unsplash.com)')
     // eslint-disable-next-line max-len
@@ -97,29 +95,29 @@ var gettingLessThanAskedFromAPIFlag = false
         https.get(imageUrl, response => {
           response.pipe(file)
             .on('close', () => {
-              // console.log("Completed!")
               bar.tick()
               return resolve(`File from ${imageUrl} downloaded.`)
             })
         }).on('error', function (e) {
 
-          console.log('Error while downloading', imageUrl, e.code)
           return reject(`Error while downloading ${imageUrl} ${e.code}`)
 
         })
       })
     }
 
-    //this
-    const makeRequestCall = (progressBarSize, url) => {
+    const makeRequestCall = (progressBarSize, options) => {
       return new Promise((resolve, reject) => {
 
-        console.log(`url : ${url}`)
+        let url = buildUrl(options)
+
         request(url, (error, response, body) => {
 
-          if (error) console.error(error)
+          if (error) reject(error)
 
-          console.log(`${error}, ${response.statusCode}`)
+          if (!error && response.statusCode === 404)
+            return reject("No images found for this search term. Please search using a different term.")
+
           if (!error && response.statusCode === 200) {
             body = JSON.parse(body)
 
@@ -128,13 +126,14 @@ var gettingLessThanAskedFromAPIFlag = false
               total: progressBarSize,
             })
 
-            // console.log("body ->>>> ", body)
+            console.log("RAW ->>>> ", body)
 
-            Object.values(body).forEach(v => {
+            Object.values(body).forEach((v, idx) => {
+
+
               const img = options.width || options.height ? v.urls.custom : v.urls.raw
 
-              // console.log(`${v.user.name} (${v.user.links.html})`)
-              // console.log(`${img}`)
+              console.log(`${v.user.name} (${v.user.links.html})`)
 
               arrayOfPromises.push(download({
                 bar,
@@ -148,13 +147,11 @@ var gettingLessThanAskedFromAPIFlag = false
 
             Promise.all(arrayOfPromises)
               .then(() => {
-                console.log("HHHHHHHHHHHHHHHHHHHHHHHhh")
                 return resolve("Batch completed!")
               })
 
           } else {
-            // console.log('Got an error: ', error)
-            return reject(`Got an error: ${error}`)
+            return reject(error)
           }
         })
 
@@ -163,38 +160,33 @@ var gettingLessThanAskedFromAPIFlag = false
 
     // the api only serves 30 files in a page...
     if (options.amount <= 30) {
-      makeRequestCall(options.amount, url)
+      makeRequestCall(options.amount, options)
         .then(() => {
-          console.log(`Completed downloading ${options.amount} images.... check the /images folder`)
+          console.log(`Completed downloading ${options.amount} images. Check the 'images' folder.`)
         })
         .catch((err) => {
           console.log(`Some error : ${err}`)
         })
     }
     else {
-
+      let totalImagesToDownload = options.amount
       let totalPagesExcludingLast = Number.parseInt(options.amount / 30)
       let remainder = options.amount % 30
-
-      console.log(` totalPagesExcludingLast : ${totalPagesExcludingLast}`)
 
         ; (async () => {
           for (let i = 0; i < totalPagesExcludingLast; i++) {
             //this is imp here......
-            // console.log("url obj ->>>>> ", buildUrl(Object.assign(options, { page: i, amount: 30 })))
-
             try {
-              // console.log(`ccccccccccccccccc ->>> ${JSON.stringify(options,2)}`)
-              await makeRequestCall(30, buildUrl(Object.assign(options, { page: i, amount: 30 })))
+              await makeRequestCall(30, Object.assign(options, { page: i, amount: 30 }))
             }
             catch (err) {
               console.error(`Some error : ${err}`)
             }
           }
 
-          remainder ? await makeRequestCall(remainder, buildUrl(Object.assign(options, { amount: remainder }))) : null
+          remainder ? await makeRequestCall(remainder,Object.assign(options, { amount: remainder })) : null
 
-          console.log(`Completed ${options.amount} downloads.... check the /images folder`)
+          console.log(`Completed downloading ${totalImagesToDownload} images. Check the 'images' folder.`)
 
         })()
 
