@@ -148,8 +148,11 @@ const { firstQuestions, nextQuestions, } = require('./questions')
                 return resolve("Batch completed!")
               })
 
-          } else {
-            return reject(error)
+          } else if(response.statusCode === 403){
+            return reject("Rate Limit Exceeded. Please try again later.")
+          }
+          else{
+            return reject(body)
           }
         })
 
@@ -163,7 +166,8 @@ const { firstQuestions, nextQuestions, } = require('./questions')
           console.log(`Completed downloading ${options.amount} images. Check the 'images' folder.`)
         })
         .catch((err) => {
-          console.log(`Some error : ${err}`)
+          console.log(`Error : ${err}`)
+          return
         })
     }
     else {
@@ -178,7 +182,8 @@ const { firstQuestions, nextQuestions, } = require('./questions')
               await makeRequestCall(30, Object.assign(options, { page: i, amount: 30 }))
             }
             catch (err) {
-              console.error(`Some error : ${err}`)
+              console.error(`Error : ${err}`)
+              return
             }
           }
 
