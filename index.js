@@ -24,7 +24,7 @@ const bulksplash = async (args) => {
         type: 'list',
         name: 'random',
         message: '📸 Which images do you want to download?',
-        choices: ['From a collection', 'Random', ],
+        choices: ['Random', 'From a collection', ],
         filter: function(val) {
           return val === 'Random'
         }
@@ -140,7 +140,7 @@ const bulksplash = async (args) => {
   }
   
 
-  let apiKeys = ["KU76e-L5LwjeOxB98AWi_NJ1BfnSe1bFQ1A7Aul9foA", "HQtqmJS7bjUyzlWJd8D1EKSmugm6CNTlYul58-DVN3Q", "fymYR5htky3PF1O4-P8YN4FqcpVim6lHd2S5bv79F5M"];
+  let apiKeys = ["KU76e-L5LwjeOxB98AWi_NJ1BfnSe1bFQ1A7Aul9foA", "ttUqGcFjnw_kag6oa9X-oM_9H5BSHFG32rFa9sIbwKs", "HQtqmJS7bjUyzlWJd8D1EKSmugm6CNTlYul58-DVN3Q", "fymYR5htky3PF1O4-P8YN4FqcpVim6lHd2S5bv79F5M"];
   let apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
 
   // console.log(options)
@@ -303,7 +303,7 @@ const bulksplash = async (args) => {
     images.map(img => {
       download({
         imageUrl: img.imageUrl,
-        dest: path.join(__dirname, `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg`),
+        dest: path.join(process.cwd(), `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg`),
         img
       })
     })

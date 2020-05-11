@@ -55,7 +55,7 @@ const conditionalQuestions = {
   requiredwidth: {
     type: 'input',
     name: 'width',
-    message: '🤏 Width?',
+    message: '🖼 Width?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
@@ -73,7 +73,7 @@ const conditionalQuestions = {
   width: {
     type: 'input',
     name: 'width',
-    message: '🤏 Width? (Optional, blank for original size)',
+    message: '🖼 Width? (Optional, blank for original size)',
     validate: function (value) {
       if (!value) {
         return true
@@ -94,7 +94,7 @@ const conditionalQuestions = {
   requiredheight: {
     type: 'input',
     name: 'height',
-    message: '🤏 Height?',
+    message: '🖼 Height?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
@@ -112,7 +112,7 @@ const conditionalQuestions = {
   height: {
     type: 'input',
     name: 'height',
-    message: '🤏 Height? (Optional, blank for original size)',
+    message: '🖼 Height? (Optional, blank for original size)',
     validate: function (value) {
       if (!value) {
         return true
