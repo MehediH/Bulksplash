@@ -10,18 +10,17 @@ const requiredQuestions = {
   amount: {
     type: 'input',
     name: 'amount',
-    message: 'How many images (up to 50)?',
+    message: '👀 How many images?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
       value > 0 &&
-      value < 50 &&
       value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
       }
 
-      return 'Please enter a number between 0 and 50'
+      return '🚨 Please enter a number higher than 1'
     },
     filter: function(val) {
       return parseInt(val, 10)
@@ -29,17 +28,11 @@ const requiredQuestions = {
     default: DEFAULTS.amount,
   },
 
-  search: {
-    type: 'input',
-    name: 'search',
-    message: 'What search term?',
-    default: DEFAULTS.search,
-  },
 
   featured: {
     type: 'list',
     name: 'featured',
-    message: 'Only featured images?',
+    message: '⭐️ Only featured images?',
     choices: ['Yes', 'No', ],
     filter: function(val) {
       return val === 'Yes'
@@ -50,7 +43,7 @@ const requiredQuestions = {
   orientation: {
     type: 'list',
     name: 'orientation',
-    message: 'What orientation?',
+    message: '🤔 What orientation?',
     choices: ['Mixed', 'Portrait', 'Landscape', 'Squarish', 'Custom',],//todo: mixed
     filter: function(val) {
       return val.toLowerCase()
@@ -62,7 +55,7 @@ const conditionalQuestions = {
   requiredwidth: {
     type: 'input',
     name: 'width',
-    message: 'Width?',
+    message: '🤏 Width?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
@@ -80,7 +73,7 @@ const conditionalQuestions = {
   width: {
     type: 'input',
     name: 'width',
-    message: 'Width? (Optional, blank for original size)',
+    message: '🤏 Width? (Optional, blank for original size)',
     validate: function (value) {
       if (!value) {
         return true
@@ -93,7 +86,7 @@ const conditionalQuestions = {
         return true
       }
 
-      return 'Please enter a number greater than 0'
+      return '🚨 Please enter a number greater than 0'
     },
     default: null,
   },
@@ -101,7 +94,7 @@ const conditionalQuestions = {
   requiredheight: {
     type: 'input',
     name: 'height',
-    message: 'Height?',
+    message: '🤏 Height?',
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
@@ -111,7 +104,7 @@ const conditionalQuestions = {
         return true
       }
 
-      return 'Please enter a number greater than 0'
+      return '🚨 Please enter a number greater than 0'
     },
     default: DEFAULTS.height,
   },
@@ -119,7 +112,7 @@ const conditionalQuestions = {
   height: {
     type: 'input',
     name: 'height',
-    message: 'Height? (Optional, blank for original size)',
+    message: '🤏 Height? (Optional, blank for original size)',
     validate: function (value) {
       if (!value) {
         return true
@@ -132,7 +125,7 @@ const conditionalQuestions = {
         return true
       }
 
-      return 'Please enter a number greater than 0'
+      return '🚨 Please enter a number greater than 0'
     },
     default: null,
   },
