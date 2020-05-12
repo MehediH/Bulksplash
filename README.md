@@ -10,7 +10,7 @@ To use Bulksplash, you need to [install Node.js](https://nodejs.org/en/download/
 
 `npx bulksplash`
 
-This will automatically download and let you use Bulksplash. To be able to use Bulksplash whever you like, you can install it globally using `npm`:
+This will automatically download and let you use Bulksplash. To be able to use Bulksplash wherever you like, you can install it globally using `npm`:
 
 `npm install bulksplash --g`
 
@@ -42,7 +42,7 @@ Prompts in the terminal will guide you through the options for downloading image
 
 ## Quick Usage
 
-Bulksplash now lets you directly use the tool without going through the prompt interface. 
+Bulksplash lets you directly use the tool without going through the prompt interface. 
 
 For example: `bulksplash --amount=50 --d=basket  -c=https://unsplash.com/collections/9454911 --f --j` will download 50 featured images from the "Basketball" collection into the "test" sub-folder and generate a credits file.
 
