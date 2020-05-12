@@ -18,7 +18,7 @@ Once installed, you can simply run `bulksplash` from the terminal on any folder 
 
 ## What's New
 
-Bulksplash is now available as an NPM package.
+Bulksplash is now [available as an NPM package.](https://www.npmjs.com/package/bulksplash)
 
 Bulksplash now lets you download images from Collections. You can view the [Unsplash Collections here](https://unsplash.com/collections), and when using Bulksplash, you can enter any of the available collection links to download all/some images from that collection.
 
