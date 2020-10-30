@@ -4,6 +4,7 @@ const DEFAULTS = {
   featured: true,
   width: 2400,
   height: 1600,
+  color: null
 }
 
 const requiredQuestions = {
@@ -48,6 +49,20 @@ const requiredQuestions = {
     filter: function(val) {
       return val.toLowerCase()
     },
+  },
+  
+  color: {
+    type: 'list',
+    name: 'color',
+    message: '🎨 What color?',
+    choices: ['Any', 'Black and white', 'Black', 'White', 'Yellow', 'Orange', 'Red', 'Purple', 'Magenta', 'Green', 'Teal', 'Blue'],
+    filter: function(val) {
+      val = val.toLowerCase().split(' ').join('_')
+      if(val === 'any')
+        val = null
+      return val
+    },
+    default: DEFAULTS.color
   },
 }
 

@@ -133,6 +133,7 @@ const bulksplash = async (args) => {
     options.width  = args["w"] && parseInt(args["w"]) > 0 ? parseInt(args["w"]) : null
     options.height  = args["h"] && parseInt(args["h"]) > 0 ? parseInt(args["h"]) : null
     options.orientation = args["o"] && ["landscape", "portrait", "squarish"].includes(args["o"]) ? args["o"] : ""
+    options.color = args["r"] && ["black and white", "black", "white", "yellow", "orange", "red", "purple", "magenta", "green", "teal", "blue"].includes(args["r"]) ? args["r"] : ""
     options.featured = args["f"] ? args["f"] : false
     options.saveCredits = args["j"] ? args["j"] : false
   } else{
@@ -145,7 +146,7 @@ const bulksplash = async (args) => {
 
   // console.log(options)
 
-  const buildUrl = ({ featured, orientation, search, width, height, amount, random, collection}) => {
+  const buildUrl = ({ featured, orientation, color, search, width, height, amount, random, collection}) => {
     let base;
 
     if(random){
@@ -160,10 +161,11 @@ const bulksplash = async (args) => {
     const a = random ? (amount > 30 ? `&count=30` : `&count=${amount}`) : ""
     const p = !random && collection ? (amount > 30 ? `&per_page=30` : `&per_page=${amount}`) : ""
     const o = orientation ? `&orientation=${orientation}` : ''
+    const c = color ? `&color=${color}` : ''
     const s = search && random ? `&query=${search}` : ''
     const w = width ? `&w=${width}` : ''
     const h = height ? `&h=${height}` : ''
-    return `${base}${a}${p}${o}${f}${w}${h}${s}${clientId}`
+    return `${base}${a}${p}${o}${c}${f}${w}${h}${s}${clientId}`
   }
 
   let url;

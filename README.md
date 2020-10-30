@@ -36,6 +36,7 @@ Prompts in the terminal will guide you through the options for downloading image
 * `How many images (up to 50)?` - The number of images to retrieve. _Defaults to 20_
 * `Only featured images?` - Should it only get featured images, curated by Unsplash? _Defaults to `Yes`_
 * `What orientation?` - What orientation should the images be? The options are `Mixed`, `Portrait`, `Landscape`, `Squarish`, or `Custom`. `Mixed` will get images regardless of orientation, while `Custom` allows you to choose a specific width and height. _Defaults to `Mixed`_
+* `What color?` - What color should the images be? The options are `Any`, `Black and white`, `Black`, `White`, `Yellow`, `Orange`, `Red`, `Purple`, `Magenta`, `Green`, `Teal`, or `Blue`. _Defaults to `Any`_
 * `Width?` - For any orientation, choose the width of the returned images. This is required when the `Custom` orientation is selected. _Defaults to blank for original size_
 * `Height?` - For `Custom` orientation, specify a height. This option is not displayed if the orientation is not 
 * `Export the credits for the photos to a .json file?` - Whether to generate the `bulksplash-credits.json` file with all the details about hte photographers. _Defaults to yes_
@@ -55,6 +56,7 @@ Available options:
 * `--w`: the width of the images.
 * `--h`: the height of the images.
 * `--o`: the orientation of the images ("landscape", "portrait", "squarish")
+* `--r`: the color of the images ("black and white", "black", "white", "yellow", "orange", "red", "purple", "magenta", "green", "teal", "blue")
 * `--f`: whether you want to download featured images.
 * `--j`: whether you want to generate a credits file.
 ---
