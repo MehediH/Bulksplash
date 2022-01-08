@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-const [,, ...args] = process.argv
+const [, , ...args] = process.argv
 
-let bulksplash;
+let bulksplash
 
 try {
-    bulksplash = require(`${process.cwd()}/node_modules/bulksplash/index`);
+  bulksplash = require(`${process.cwd()}/node_modules/bulksplash/index`)
 } catch (e) {
-    bulksplash = require('./index');
+  bulksplash = require('./index')
 }
 
 bulksplash(args)
