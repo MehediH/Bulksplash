@@ -20,14 +20,6 @@ Once installed, you can simply run `bulksplash` from the terminal on any folder 
 
 To use Bulksplash, you NEED to obtain an API key for Unsplash. This can be done by [signing up here](https://unsplash.com/developers) and creating a Demo app. This will allow you to download 50 images per hour, but if you want to download more than that, you will need to apply for Production access via Unsplash Developers.
 
-## What's New
-
-Bulksplash is now [available as an NPM package.](https://www.npmjs.com/package/bulksplash)
-
-Bulksplash now lets you download images from Collections. You can view the [Unsplash Collections here](https://unsplash.com/collections), and when using Bulksplash, you can enter any of the available collection links to download all/some images from that collection.
-
-Bulksplash also now automatically generates a `bulksplash-credits.json` file that has the details of the photographers who made their pictures available on Unsplash.
-
 ## Options
 
 Prompts in the terminal will guide you through the options for downloading images, with some default values for quicker use. The prompts are as follows:
