@@ -56,6 +56,7 @@ Available options:
 * `--h`: the height of the images.
 * `--o`: the orientation of the images ("landscape", "portrait", "squarish")
 * `--f`: whether you want to download featured images.
+* `--n`: the name scheme of the downloaded images (0 for `authorname-randomstring`, 1 for numbered list)
 * `--j`: whether you want to generate a credits file.
 ---
 

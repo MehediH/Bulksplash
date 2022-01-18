@@ -2,7 +2,7 @@
   "name": "bulksplash",
   "version": "2.0.2",
   "description": "A simple command line tool that lets you bulk download images from Unsplash",
-  "main": "main.js",
+  "main": "cli.js",
   "dependencies": {
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
@@ -20,7 +20,7 @@
     "bulksplash": "./cli.js"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node cli.js"
   },
   "repository": {
     "type": "git",

@@ -4,6 +4,7 @@ const DEFAULTS = {
   featured: true,
   width: 2400,
   height: 1600,
+  nameScheme: 0,
 }
 
 const requiredQuestions = {
@@ -38,6 +39,17 @@ const requiredQuestions = {
       return val === 'Yes'
     },
     default: DEFAULTS.featured,
+  },
+
+  nameScheme: {
+    type: 'list',
+    name: 'nameScheme',
+    message: '🏷 What naming scheme?',
+    choices: [
+      { name: 'Default (bulksplash-authorname-QckxruozjRg.jpg)', value: 0, short: 'Default', },
+      { name: 'Numbered List (bulksplash-1.jpg, bulksplash-2.jpg, etc.)', value: 1, short: 'Numbered List', },
+    ],
+    default: 0,
   },
 
   orientation: {
