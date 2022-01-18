@@ -16,6 +16,11 @@ const bulksplash = async (args) => {
     await inquirer.prompt([
       {
         type: 'input',
+        name: 'apiKey',
+        message: '🔑 What is your API key?'
+      },
+      {
+        type: 'input',
         name: 'path',
         message: '📂 Which directory do you want to save to?',
         default: "."
@@ -31,6 +36,7 @@ const bulksplash = async (args) => {
       }
     ]).then(answers => {
       options.random = answers.random;
+      options.apiKey = answers.apiKey;
       basePath = answers.path === "." ? "" : answers.path
     })
 
@@ -140,12 +146,11 @@ const bulksplash = async (args) => {
   }
   
 
-  let apiKeys = ["KU76e-L5LwjeOxB98AWi_NJ1BfnSe1bFQ1A7Aul9foA", "ttUqGcFjnw_kag6oa9X-oM_9H5BSHFG32rFa9sIbwKs", "HQtqmJS7bjUyzlWJd8D1EKSmugm6CNTlYul58-DVN3Q", "fymYR5htky3PF1O4-P8YN4FqcpVim6lHd2S5bv79F5M"];
-  let apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
+  
 
   // console.log(options)
 
-  const buildUrl = ({ featured, orientation, search, width, height, amount, random, collection}) => {
+  const buildUrl = ({ featured, orientation, search, width, height, amount, random, collection, apiKey}) => {
     let base;
 
     if(random){
@@ -188,7 +193,7 @@ const bulksplash = async (args) => {
     })
   }
 
-  const download = ({ imageUrl, dest, img }) => {
+  const download = ({ imageUrl, dest, img, apiKey, width }) => {
     let dir = path.parse(dest).dir;
 
     if (!fs.existsSync(dir)){
@@ -219,7 +224,9 @@ const bulksplash = async (args) => {
         }
       }
     }, { once: true, })
-    
+    if (width) {
+      imageUrl+="&w="+width
+    }
     https.get(imageUrl, response => {
       response.pipe(file)
     }).on('error', function (e) {
@@ -256,7 +263,7 @@ const bulksplash = async (args) => {
           body = JSON.parse(body)
 
           Object.values(body).forEach(v => {
-              const img = (options.random && (options.width || options.height)) ? v.urls.custom : v.urls.full
+              const img = (options.random && (options.width || options.height)) ? v.urls.raw : v.urls.full
               images.push({
                 imageUrl: img,
                 id: v.id,
@@ -304,7 +311,9 @@ const bulksplash = async (args) => {
       download({
         imageUrl: img.imageUrl,
         dest: path.join(process.cwd(), `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg`),
-        img
+        img,
+        apiKey:options.apiKey,
+        width:options.width
       })
     })
   })
