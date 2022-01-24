@@ -7,6 +7,23 @@ const DEFAULTS = {
   nameScheme: 0,
 }
 
+const helpMessage = `Usage: npx bulksplash 
+       npx bulksplash --amount=50 --d=basket  -c=https://unsplash.com/collections/9454911 --f --j
+
+Available options:
+
+* --d: the directory you want to save images to.
+* --c: if you want to download images from a collection, enter the link of the Unsplash collection you want to download images from.
+* --q: if you want to download images about something specific, you can enter a search query.
+* --a: the number of images you want to download.
+* --w: the width of the images.
+* --h: the height of the images.
+* --o: the orientation of the images ("landscape", "portrait", "squarish")
+* --f: whether you want to download featured images.
+* --n: the name scheme of the downloaded images (0 for "authorname-randomstring", 1 for numbered list)
+* --j: whether you want to generate a credits file.
+`
+
 const requiredQuestions = {
   amount: {
     type: 'input',
@@ -15,15 +32,15 @@ const requiredQuestions = {
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
-      value > 0 &&
-      value === parseInt(value.toFixed(), 10)
+        value > 0 &&
+        value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
       }
 
       return '🚨 Please enter a number higher than 1'
     },
-    filter: function(val) {
+    filter: function (val) {
       return parseInt(val, 10)
     },
     default: DEFAULTS.amount,
@@ -34,8 +51,8 @@ const requiredQuestions = {
     type: 'list',
     name: 'featured',
     message: '⭐️ Only featured images?',
-    choices: ['Yes', 'No', ],
-    filter: function(val) {
+    choices: ['Yes', 'No',],
+    filter: function (val) {
       return val === 'Yes'
     },
     default: DEFAULTS.featured,
@@ -57,7 +74,7 @@ const requiredQuestions = {
     name: 'orientation',
     message: '🤔 What orientation?',
     choices: ['Mixed', 'Portrait', 'Landscape', 'Squarish', 'Custom',],//todo: mixed
-    filter: function(val) {
+    filter: function (val) {
       return val.toLowerCase()
     },
   },
@@ -71,8 +88,8 @@ const conditionalQuestions = {
     validate: function (value) {
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
-      value > 0 &&
-      value === parseInt(value.toFixed(), 10)
+        value > 0 &&
+        value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
       }
@@ -92,8 +109,8 @@ const conditionalQuestions = {
       }
       value = parseInt(value, 10)
       const pass = typeof value === 'number' &&
-      value > 0 &&
-      value === parseInt(value.toFixed(), 10)
+        value > 0 &&
+        value === parseInt(value.toFixed(), 10)
       if (pass) {
         return true
       }
@@ -152,4 +169,5 @@ const nextQuestions = ({ required = true, side = 'width', }) => {
 module.exports = {
   firstQuestions,
   nextQuestions,
+  helpMessage,
 }

@@ -35,6 +35,7 @@ Prompts in the terminal will guide you through the options for downloading image
 * `Enter the URL of the Unsplash collection you want to download from ` - The link of the Unsplash Collection you want to download _Defaults to blank, needs to be a valid link_
 * `How many images (up to 50)?` - The number of images to retrieve. _Defaults to 20_
 * `Only featured images?` - Should it only get featured images, curated by Unsplash? _Defaults to `Yes`_
+* `What naming scheme?` - Should it name the images randomly, or in an numbered list? _Defaults to `Random`_
 * `What orientation?` - What orientation should the images be? The options are `Mixed`, `Portrait`, `Landscape`, `Squarish`, or `Custom`. `Mixed` will get images regardless of orientation, while `Custom` allows you to choose a specific width and height. _Defaults to `Mixed`_
 * `Width?` - For any orientation, choose the width of the returned images. This is required when the `Custom` orientation is selected. _Defaults to blank for original size_
 * `Height?` - For `Custom` orientation, specify a height. This option is not displayed if the orientation is not 

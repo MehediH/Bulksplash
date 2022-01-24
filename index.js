@@ -4,7 +4,9 @@ const https = require('https')
 const path = require('path')
 const ProgressBar = require('progress')
 const inquirer = require('inquirer')
-const { firstQuestions, nextQuestions, } = require('./questions')
+
+const { firstQuestions, nextQuestions, helpMessage, } = require('./questions')
+
 
 const bulksplash = async (args) => {
 
@@ -127,200 +129,206 @@ const bulksplash = async (args) => {
       options.collection = args.c
     }
 
+    if (args.help == true) {
+      console.log(helpMessage)
+    } else {
+      options.search = args.q ? args.q : ''
+      options.amount = args.a && parseInt(args.a) > 0 ? parseInt(args.a) : 20
+      options.width = args.w && parseInt(args.w) > 0 ? parseInt(args.w) : null
+      options.height = args.h && parseInt(args.h) > 0 ? parseInt(args.h) : null
+      options.orientation = args.o && ['landscape', 'portrait', 'squarish',].includes(args.o) ? args.o : ''
+      options.featured = args.f ? args.f : false
+      options.nameScheme = args.n ? 0 : 1
+      options.saveCredits = args.j ? args.j : false
+    }
 
-    options.search = args.q ? args.q : ''
-    options.amount = args.a && parseInt(args.a) > 0 ? parseInt(args.a) : 20
-    options.width = args.w && parseInt(args.w) > 0 ? parseInt(args.w) : null
-    options.height = args.h && parseInt(args.h) > 0 ? parseInt(args.h) : null
-    options.orientation = args.o && ['landscape', 'portrait', 'squarish',].includes(args.o) ? args.o : ''
-    options.featured = args.f ? args.f : false
-    options.nameScheme = args.n ? 0 : 1
-    options.saveCredits = args.j ? args.j : false
   } else {
     await ask()
   }
 
 
-  let apiKeys = ['KU76e-L5LwjeOxB98AWi_NJ1BfnSe1bFQ1A7Aul9foA', 'ttUqGcFjnw_kag6oa9X-oM_9H5BSHFG32rFa9sIbwKs', 'HQtqmJS7bjUyzlWJd8D1EKSmugm6CNTlYul58-DVN3Q', 'fymYR5htky3PF1O4-P8YN4FqcpVim6lHd2S5bv79F5M',]
-  let apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
+  if (!args.help) {
+    let apiKeys = ['KU76e-L5LwjeOxB98AWi_NJ1BfnSe1bFQ1A7Aul9foA', 'ttUqGcFjnw_kag6oa9X-oM_9H5BSHFG32rFa9sIbwKs', 'HQtqmJS7bjUyzlWJd8D1EKSmugm6CNTlYul58-DVN3Q', 'fymYR5htky3PF1O4-P8YN4FqcpVim6lHd2S5bv79F5M',]
+    let apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
 
-  // console.log(options)
+    // console.log(options)
 
-  const buildUrl = ({ featured, orientation, search, width, height, amount, random, collection, }) => {
-    let base
+    const buildUrl = ({ featured, orientation, search, width, height, amount, random, collection, }) => {
+      let base
 
-    if (random) {
-      base = 'https://api.unsplash.com/photos/random?'
-    } else if (collection) {
-      let collectionId = collection.split('/')[4]
-      base = `https://api.unsplash.com/collections/${collectionId}/photos?`
-    }
-
-    const clientId = '&client_id=' + apiKey
-    const f = random && featured ? '&featured' : ''
-    const a = random ? (amount > 30 ? '&count=30' : `&count=${amount}`) : ''
-    const p = !random && collection ? (amount > 30 ? '&per_page=30' : `&per_page=${amount}`) : ''
-    const o = orientation ? `&orientation=${orientation}` : ''
-    const s = search && random ? `&query=${search}` : ''
-    const w = width ? `&w=${width}` : ''
-    const h = height ? `&h=${height}` : ''
-    return `${base}${a}${p}${o}${f}${w}${h}${s}${clientId}`
-  }
-
-  let url
-
-
-  console.log('\n🤖 Welcome to Bulksplash! (Powered by Unsplash.com)')
-  // eslint-disable-next-line max-len
-  console.log(`\n🔰 Downloading ${options.amount}${options.featured ? ' featured' : ''}${options.search ? ' "' + options.search + '"' : ''} images from:`)
-
-  let bar
-
-  let creditsAlreadyPrinted = {}
-  let c = 0
-  const saveCredits = (credits, dest) => {
-    credits = Object.values(credits)
-
-    fs.writeFile(dest + '/bulksplash-credits.json', JSON.stringify(credits, null, '\t'), 'utf8', (err) => {
-      if (err) {
-        return
+      if (random) {
+        base = 'https://api.unsplash.com/photos/random?'
+      } else if (collection) {
+        let collectionId = collection.split('/')[4]
+        base = `https://api.unsplash.com/collections/${collectionId}/photos?`
       }
-      console.log('🗂  A .json file with details about the photographers has been saved to ' + dest + '/bulksplash-credits.json\n')
-    })
-  }
 
-  const download = ({ imageUrl, dest, img, }) => {
-    let dir = path.parse(dest).dir
-
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir)
+      const clientId = '&client_id=' + apiKey
+      const f = random && featured ? '&featured' : ''
+      const a = random ? (amount > 30 ? '&count=30' : `&count=${amount}`) : ''
+      const p = !random && collection ? (amount > 30 ? '&per_page=30' : `&per_page=${amount}`) : ''
+      const o = orientation ? `&orientation=${orientation}` : ''
+      const s = search && random ? `&query=${search}` : ''
+      const w = width ? `&w=${width}` : ''
+      const h = height ? `&h=${height}` : ''
+      return `${base}${a}${p}${o}${f}${w}${h}${s}${clientId}`
     }
 
-    let { owner, } = img
+    let url
 
-    if (!(owner.username in creditsAlreadyPrinted)) {
-      console.log(`📸 ${owner.name} (${owner.link})`)
-      creditsAlreadyPrinted[owner.username] = owner
-    }
 
-    c += 1
-    if (c == bar.total) {
-      console.log('\n⏳ Preparing download...\n')
-    }
+    console.log('\n🤖 Welcome to Bulksplash! (Powered by Unsplash.com)')
+    // eslint-disable-next-line max-len
+    console.log(`\n🔰 Downloading ${options.amount}${options.featured ? ' featured' : ''}${options.search ? ' "' + options.search + '"' : ''} images from:`)
 
-    const file = fs.createWriteStream(dest)
+    let bar
 
-    file.on('close', () => {
-      bar.tick()
-      if (bar.complete) {
-        if (bar.total == options.amount) {
-          console.log('\n😌 All the photos have been downloaded!\n')
-        } else if (bar.total < options.amount) {
-          console.log('😔 There weren\'t enough images under the category you suggested, so we got as many as we could.')
+    let creditsAlreadyPrinted = {}
+    let c = 0
+    const saveCredits = (credits, dest) => {
+      credits = Object.values(credits)
+
+      fs.writeFile(dest + '/bulksplash-credits.json', JSON.stringify(credits, null, '\t'), 'utf8', (err) => {
+        if (err) {
+          return
         }
+        console.log('🗂  A .json file with details about the photographers has been saved to ' + dest + '/bulksplash-credits.json\n')
+      })
+    }
 
+    const download = ({ imageUrl, dest, img, }) => {
+      let dir = path.parse(dest).dir
 
-        if (options.saveCredits) {
-          saveCredits(creditsAlreadyPrinted, dir)
-        }
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir)
       }
-    }, { once: true, })
 
-    https.get(imageUrl, response => {
-      response.pipe(file)
-    }).on('error', function (e) {
-      fs.unlink(dest, () => { })
-      console.log('🚨 Error while downloading', imageUrl, e.code)
-    })
+      let { owner, } = img
 
-    // make request to Unsplash download endpoint to meet API requirements
-    // we don't download from endpoint because it deosn't let us download custom sizes
-    request(`https://api.unsplash.com/photos/${img.id}/download?client_id=${apiKey}`, (error, response, body) => {
-      // do nothing
-    })
-  }
+      if (!(owner.username in creditsAlreadyPrinted)) {
+        console.log(`📸 ${owner.name} (${owner.link})`)
+        creditsAlreadyPrinted[owner.username] = owner
+      }
+
+      c += 1
+      if (c == bar.total) {
+        console.log('\n⏳ Preparing download...\n')
+      }
+
+      const file = fs.createWriteStream(dest)
+
+      file.on('close', () => {
+        bar.tick()
+        if (bar.complete) {
+          if (bar.total == options.amount) {
+            console.log('\n😌 All the photos have been downloaded!\n')
+          } else if (bar.total < options.amount) {
+            console.log('😔 There weren\'t enough images under the category you suggested, so we got as many as we could.')
+          }
 
 
-  let promises = []
-  let images = []
-  let iterations = 1
-  let tAmount = options.amount - 30
+          if (options.saveCredits) {
+            saveCredits(creditsAlreadyPrinted, dir)
+          }
+        }
+      }, { once: true, })
 
-  if (tAmount > 30) {
-    while (tAmount > 0) {
-      iterations += 1
-      tAmount -= 30
+      https.get(imageUrl, response => {
+        response.pipe(file)
+      }).on('error', function (e) {
+        fs.unlink(dest, () => { })
+        console.log('🚨 Error while downloading', imageUrl, e.code)
+      })
+
+      // make request to Unsplash download endpoint to meet API requirements
+      // we don't download from endpoint because it deosn't let us download custom sizes
+      request(`https://api.unsplash.com/photos/${img.id}/download?client_id=${apiKey}`, (error, response, body) => {
+        // do nothing
+      })
     }
-  }
 
 
-  let processImages = () => {
-    return new Promise(resolve => {
-      request(url, (error, response, body) => {
+    let promises = []
+    let images = []
+    let iterations = 1
+    let tAmount = options.amount - 30
 
-        if (!error && response.statusCode === 200) {
-          body = JSON.parse(body)
+    if (tAmount > 30) {
+      while (tAmount > 0) {
+        iterations += 1
+        tAmount -= 30
+      }
+    }
 
-          Object.values(body).forEach(v => {
-            const img = (options.random && (options.width || options.height)) ? v.urls.custom : v.urls.full
-            images.push({
-              imageUrl: img,
-              id: v.id,
-              owner: {
-                username: v.user.username,
-                name: v.user.name,
-                link: v.user.links.html,
-              },
+
+    let processImages = () => {
+      return new Promise(resolve => {
+        request(url, (error, response, body) => {
+
+          if (!error && response.statusCode === 200) {
+            body = JSON.parse(body)
+
+            Object.values(body).forEach(v => {
+              const img = (options.random && (options.width || options.height)) ? v.urls.custom : v.urls.full
+              images.push({
+                imageUrl: img,
+                id: v.id,
+                owner: {
+                  username: v.user.username,
+                  name: v.user.name,
+                  link: v.user.links.html,
+                },
+              })
+
             })
 
-          })
-
-          resolve(images)
-        } else {
-          console.log(`🚨 Something went wrong, got response code ${response.statusCode} from Unsplash - ${response.statusMessage}`)
-        }
+            resolve(images)
+          } else {
+            console.log(`🚨 Something went wrong, got response code ${response.statusCode} from Unsplash - ${response.statusMessage}`)
+          }
+        })
       })
-    })
-  }
-
-  let page = 1
-  for (let i = 0; i < iterations; i++) {
-    url = buildUrl(options)
-    if (options.random && options.amount > 30) {
-      options.amount -= 30
-    } else if (!options.random && page <= iterations) {
-      options.amount -= 30
-      url += '&page=' + page
-      page += 1
     }
 
-    promises.push(processImages())
-  }
+    let page = 1
+    for (let i = 0; i < iterations; i++) {
+      url = buildUrl(options)
+      if (options.random && options.amount > 30) {
+        options.amount -= 30
+      } else if (!options.random && page <= iterations) {
+        options.amount -= 30
+        url += '&page=' + page
+        page += 1
+      }
 
-  Promise.all(promises).then((images) => {
-    images = [].concat.apply([], [...new Set(images),])
+      promises.push(processImages())
+    }
 
-    bar = new ProgressBar('🤩 DOWNLOADING [:bar]', {
-      total: images.length,
-      complete: '=',
-      incomplete: ' ',
-    })
+    Promise.all(promises).then((images) => {
+      images = [].concat.apply([], [...new Set(images),])
 
-    let imageNum = 1
-    images.map(img => {
-
-      download({
-        imageUrl: img.imageUrl,
-        dest: path.join(process.cwd(), options.nameScheme == 0 ?
-          `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg` :
-          `${basePath}/bulksplash-${imageNum}.jpg`
-        ),
-        img,
+      bar = new ProgressBar('🤩 DOWNLOADING [:bar]', {
+        total: images.length,
+        complete: '=',
+        incomplete: ' ',
       })
 
-      imageNum += 1
+      let imageNum = 1
+      images.map(img => {
+
+        download({
+          imageUrl: img.imageUrl,
+          dest: path.join(process.cwd(), options.nameScheme == 0 ?
+            `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg` :
+            `${basePath}/bulksplash-${imageNum}.jpg`
+          ),
+          img,
+        })
+
+        imageNum += 1
+      })
     })
-  })
+  }
 
 
 
