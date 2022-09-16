@@ -138,6 +138,7 @@ const bulksplash = async (args) => {
       options.collection = args.c;
     }
 
+    options.apiKey = args.k ? args.k : "";
     options.search = args.q ? args.q : "";
     options.amount = args.a && parseInt(args.a) > 0 ? parseInt(args.a) : 20;
     options.width = args.w && parseInt(args.w) > 0 ? parseInt(args.w) : null;

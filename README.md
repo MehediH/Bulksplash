@@ -44,6 +44,7 @@ For example: `bulksplash --amount=50 --d=basket -c=https://unsplash.com/collecti
 
 Available options:
 
+- `--k`: your Unsplash API key.
 - `--d`: the directory you want to save images to.
 - `--c`: if you want to download images from a collection, enter the link of the Unsplash collection you want to download images from.
 - `--q`: if you want to download images about something specific, you can enter a search query.
