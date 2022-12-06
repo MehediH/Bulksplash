@@ -157,6 +157,7 @@ const bulksplash = async (args) => {
 
   const buildUrl = ({
     featured,
+    order_by,
     orientation,
     search,
     width,
@@ -177,6 +178,7 @@ const bulksplash = async (args) => {
 
     const clientId = "&client_id=" + apiKey;
     const f = random && featured ? "&featured" : "";
+    const ob = order_by ? "&order_by="+order_by:"";
     const a = random ? (amount > 30 ? "&count=30" : `&count=${amount}`) : "";
     const p =
       !random && collection
@@ -188,7 +190,7 @@ const bulksplash = async (args) => {
     const s = search && random ? `&query=${search}` : "";
     const w = width ? `&w=${width}` : "";
     const h = height ? `&h=${height}` : "";
-    return `${base}${a}${p}${o}${f}${w}${h}${s}${clientId}`;
+    return `${base}${a}${p}${o}${ob}${f}${w}${h}${s}${clientId}`;
   };
 
   let url;

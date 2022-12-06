@@ -41,6 +41,17 @@ const requiredQuestions = {
     default: DEFAULTS.featured,
   },
 
+  order_by: {
+    type: 'list',
+    name: 'order_by',
+    message: 'order by?',
+    choices: [
+      { name: 'relevant', value: 'relevant', short: 'relevant', },
+      { name: 'latest', value: 'latest', short: 'latest', },
+    ],
+    default: 'relevant'
+  },
+
   nameScheme: {
     type: 'list',
     name: 'nameScheme',
