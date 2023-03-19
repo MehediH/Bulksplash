@@ -40,7 +40,7 @@ Prompts in the terminal will guide you through the options for downloading image
 
 Bulksplash lets you directly use the tool without going through the prompt interface.
 
-For example: `bulksplash --amount=50 --d=basket -c=https://unsplash.com/collections/9454911 --f --j` will download 50 featured images from the "Basketball" collection into the "test" sub-folder and generate a credits file.
+For example: `bulksplash --a=50 --d=basket -c=https://unsplash.com/collections/9454911 --f --j --k=API_KEY` will download 50 featured images from the "Basketball" collection into the "test" sub-folder and generate a credits file.
 
 Available options:
 
@@ -54,6 +54,7 @@ Available options:
 - `--f`: whether you want to download featured images.
 - `--n`: the name scheme of the downloaded images (0 for `authorname-randomstring`, 1 for numbered list)
 - `--j`: whether you want to generate a credits file.
+- `--k`: your Unsplash API key.
 
 ---
 
