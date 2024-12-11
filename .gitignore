@@ -39,3 +39,5 @@ jspm_packages
 .DS_Store
 images/*
 .vscode
+
+bulksplash
