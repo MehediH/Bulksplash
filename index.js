@@ -1,13 +1,14 @@
-const request = require("request");
-const fs = require("fs");
-const https = require("https");
-const path = require("path");
-const ProgressBar = require("progress");
-const inquirer = require("inquirer");
-const { firstQuestions, nextQuestions } = require("./questions");
+/* eslint-disable camelcase */
+const request = require('request');
+const fs = require('fs');
+const https = require('https');
+const path = require('path');
+const ProgressBar = require('progress');
+const inquirer = require('inquirer');
+const { firstQuestions, nextQuestions } = require('./questions');
 
 const bulksplash = async (args) => {
-  let basePath = "";
+  let basePath = '';
 
   const options = {};
 
@@ -15,30 +16,30 @@ const bulksplash = async (args) => {
     await inquirer
       .prompt([
         {
-          type: "input",
-          name: "apiKey",
-          message: "🔑 What is your API key?",
+          type: 'input',
+          name: 'apiKey',
+          message: '🔑 What is your API key?',
         },
         {
-          type: "input",
-          name: "path",
-          message: "📂 Which directory do you want to save to?",
-          default: ".",
+          type: 'input',
+          name: 'path',
+          message: '📂 Which directory do you want to save to?',
+          default: '.',
         },
         {
-          type: "list",
-          name: "random",
-          message: "📸 Which images do you want to download?",
-          choices: ["Random", "From a collection"],
+          type: 'list',
+          name: 'random',
+          message: '📸 Which images do you want to download?',
+          choices: ['Random', 'From a collection'],
           filter: function (val) {
-            return val === "Random";
+            return val === 'Random';
           },
         },
       ])
       .then((answers) => {
         options.random = answers.random;
         options.apiKey = answers.apiKey;
-        basePath = answers.path === "." ? "" : answers.path;
+        basePath = answers.path === '.' ? '' : answers.path;
       });
 
     if (options.random) {
@@ -46,9 +47,9 @@ const bulksplash = async (args) => {
       await inquirer
         .prompt([
           {
-            type: "input",
-            name: "search",
-            message: "🔍 What search term?",
+            type: 'input',
+            name: 'search',
+            message: '🔍 What search term?',
           },
         ])
         .then((answers) => (options.search = answers.search));
@@ -57,16 +58,16 @@ const bulksplash = async (args) => {
       await inquirer
         .prompt([
           {
-            type: "input",
-            name: "collection",
+            type: 'input',
+            name: 'collection',
             message:
-              "📎 Enter the URL of the Unsplash collection you want to download from",
+              '📎 Enter the URL of the Unsplash collection you want to download from',
             validate: (value) => {
-              if (value.startsWith("https://unsplash.com/collections/")) {
+              if (value.startsWith('https://unsplash.com/collections/')) {
                 return true;
               }
 
-              return "🚨 Please enter a valid Unsplash Collections URL!";
+              return '🚨 Please enter a valid Unsplash Collections URL!';
             },
           },
         ])
@@ -80,11 +81,11 @@ const bulksplash = async (args) => {
     });
 
     if (options.random) {
-      if (options.orientation === "custom") {
+      if (options.orientation === 'custom') {
         await inquirer
           .prompt([
-            nextQuestions({ required: true, side: "width" }),
-            nextQuestions({ required: true, side: "height" }),
+            nextQuestions({ required: true, side: 'width' }),
+            nextQuestions({ required: true, side: 'height' }),
           ])
           .then((answers) => {
             options.width = answers.width;
@@ -92,13 +93,13 @@ const bulksplash = async (args) => {
           });
       } else {
         await inquirer
-          .prompt([nextQuestions({ required: false, side: "width" })])
+          .prompt([nextQuestions({ required: false, side: 'width' })])
           .then((answers) => {
             options.width = answers.width;
           });
         if (!options.width) {
           await inquirer
-            .prompt([nextQuestions({ required: false, side: "height" })])
+            .prompt([nextQuestions({ required: false, side: 'height' })])
             .then((answers) => {
               options.height = answers.height;
             });
@@ -106,16 +107,16 @@ const bulksplash = async (args) => {
       }
     }
 
-    if (options.orientation === "custom" || options.orientation === "mixed") {
+    if (options.orientation === 'custom' || options.orientation === 'mixed') {
       delete options.orientation;
     }
 
     await inquirer
       .prompt([
         {
-          type: "confirm",
-          name: "saveCredits",
-          message: "🗂  Export the credits for the photos to a .json file?",
+          type: 'confirm',
+          name: 'saveCredits',
+          message: '🗂  Export the credits for the photos to a .json file?',
           default: true,
         },
       ])
@@ -125,27 +126,27 @@ const bulksplash = async (args) => {
 
     return options;
   };
-  
+
   if (args.length != 0) {
     args = require('minimist')(process.argv.slice(2));
-    basePath = args.d ? args.d : "";
+    basePath = args.d ? args.d : '';
 
     options.random = true;
 
-    if (args.c && args.c.startsWith("https://unsplash.com/collections/")) {
+    if (args.c && args.c.startsWith('https://unsplash.com/collections/')) {
       options.random = false;
       options.collection = args.c;
     }
 
-    options.apiKey = args.k ? args.k : "";
-    options.search = args.q ? args.q : "";
+    options.apiKey = args.k ? args.k : '';
+    options.search = args.q ? args.q : '';
     options.amount = args.a && parseInt(args.a) > 0 ? parseInt(args.a) : 20;
     options.width = args.w && parseInt(args.w) > 0 ? parseInt(args.w) : null;
     options.height = args.h && parseInt(args.h) > 0 ? parseInt(args.h) : null;
     options.orientation =
-      args.o && ["landscape", "portrait", "squarish"].includes(args.o)
+      args.o && ['landscape', 'portrait', 'squarish'].includes(args.o)
         ? args.o
-        : "";
+        : '';
     options.featured = args.f ? args.f : false;
     options.nameScheme = args.n ? 0 : 1;
     options.saveCredits = args.j ? args.j : false;
@@ -170,36 +171,36 @@ const bulksplash = async (args) => {
     let base;
 
     if (random) {
-      base = "https://api.unsplash.com/photos/random?";
+      base = 'https://api.unsplash.com/photos/random?';
     } else if (collection) {
-      let collectionId = collection.split("/")[4];
+      let collectionId = collection.split('/')[4];
       base = `https://api.unsplash.com/collections/${collectionId}/photos?`;
     }
 
-    const clientId = "&client_id=" + apiKey;
-    const f = random && featured ? "&featured" : "";
-    const ob = order_by ? "&order_by="+order_by:"";
-    const a = random ? (amount > 30 ? "&count=30" : `&count=${amount}`) : "";
+    const clientId = '&client_id=' + apiKey;
+    const f = random && featured ? '&featured' : '';
+    const ob = order_by ? '&order_by=' + order_by : '';
+    const a = random ? (amount > 30 ? '&count=30' : `&count=${amount}`) : '';
     const p =
       !random && collection
         ? amount > 30
-          ? "&per_page=30"
+          ? '&per_page=30'
           : `&per_page=${amount}`
-        : "";
-    const o = orientation ? `&orientation=${orientation}` : "";
-    const s = search && random ? `&query=${search}` : "";
-    const w = width ? `&w=${width}` : "";
-    const h = height ? `&h=${height}` : "";
+        : '';
+    const o = orientation ? `&orientation=${orientation}` : '';
+    const s = search && random ? `&query=${search}` : '';
+    const w = width ? `&w=${width}` : '';
+    const h = height ? `&h=${height}` : '';
     return `${base}${a}${p}${o}${ob}${f}${w}${h}${s}${clientId}`;
   };
 
   let url;
 
-  console.log("\n🤖 Welcome to Bulksplash! (Powered by Unsplash.com)");
+  console.log('\n🤖 Welcome to Bulksplash! (Powered by Unsplash.com)');
   // eslint-disable-next-line max-len
   console.log(
-    `\n🔰 Downloading ${options.amount}${options.featured ? " featured" : ""}${
-      options.search ? ' "' + options.search + '"' : ""
+    `\n🔰 Downloading ${options.amount}${options.featured ? ' featured' : ''}${
+      options.search ? ' "' + options.search + '"' : ''
     } images from:`
   );
 
@@ -211,17 +212,17 @@ const bulksplash = async (args) => {
     credits = Object.values(credits);
 
     fs.writeFile(
-      dest + "/bulksplash-credits.json",
-      JSON.stringify(credits, null, "\t"),
-      "utf8",
+      dest + '/bulksplash-credits.json',
+      JSON.stringify(credits, null, '\t'),
+      'utf8',
       (err) => {
         if (err) {
           return;
         }
         console.log(
-          "🗂  A .json file with details about the photographers has been saved to " +
+          '🗂  A .json file with details about the photographers has been saved to ' +
             dest +
-            "/bulksplash-credits.json\n"
+            '/bulksplash-credits.json\n'
         );
       }
     );
@@ -243,18 +244,18 @@ const bulksplash = async (args) => {
 
     c += 1;
     if (c == bar.total) {
-      console.log("\n⏳ Preparing download...\n");
+      console.log('\n⏳ Preparing download...\n');
     }
 
     const file = fs.createWriteStream(dest);
 
     file.on(
-      "close",
+      'close',
       () => {
         bar.tick();
         if (bar.complete) {
           if (bar.total == options.amount) {
-            console.log("\n😌 All the photos have been downloaded!\n");
+            console.log('\n😌 All the photos have been downloaded!\n');
           } else if (bar.total < options.amount) {
             console.log(
               "😔 There weren't enough images under the category you suggested, so we got as many as we could."
@@ -269,21 +270,22 @@ const bulksplash = async (args) => {
       { once: true }
     );
     if (width) {
-      imageUrl += "&w=" + width;
+      imageUrl += '&w=' + width;
     }
     https
       .get(imageUrl, (response) => {
         response.pipe(file);
       })
-      .on("error", function (e) {
+      .on('error', function (e) {
         fs.unlink(dest, () => {});
-        console.log("🚨 Error while downloading", imageUrl, e.code);
+        console.log('🚨 Error while downloading', imageUrl, e.code);
       });
 
     // make request to Unsplash download endpoint to meet API requirements
     // we don't download from endpoint because it deosn't let us download custom sizes
     request(
       `https://api.unsplash.com/photos/${img.id}/download?client_id=${apiKey}`,
+      // eslint-disable-next-line no-unused-vars
       (error, response, body) => {
         // do nothing
       }
@@ -327,7 +329,7 @@ const bulksplash = async (args) => {
           resolve(images);
         } else {
           console.log(
-            `🚨 Something went wrong, got response code ${response.statusCode} from Unsplash - ${response.statusMessage}`
+            `🚨 Something went wrong, got response code ${response.statusCode} from Unsplash - ${response.statusƒ}`
           );
         }
       });
@@ -341,7 +343,7 @@ const bulksplash = async (args) => {
       options.amount -= 30;
     } else if (!options.random && page <= iterations) {
       options.amount -= 30;
-      url += "&page=" + page;
+      url += '&page=' + page;
       page += 1;
     }
 
@@ -351,10 +353,10 @@ const bulksplash = async (args) => {
   Promise.all(promises).then((images) => {
     images = [].concat.apply([], [...new Set(images)]);
 
-    bar = new ProgressBar("🤩 DOWNLOADING [:bar]", {
+    bar = new ProgressBar('🤩 DOWNLOADING [:bar]', {
       total: images.length,
-      complete: "=",
-      incomplete: " ",
+      complete: '=',
+      incomplete: ' ',
     });
 
     let imageNum = 1;
@@ -363,7 +365,9 @@ const bulksplash = async (args) => {
         imageUrl: img.imageUrl,
         dest: path.join(
           process.cwd(),
-          `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg`
+          options.nameScheme === 0
+            ? `${basePath}/bulksplash-${img.owner.username}-${img.id}.jpg`
+            : `${basePath}/bulksplash-${imageNum}.jpg`
         ),
         img,
         apiKey: options.apiKey,
