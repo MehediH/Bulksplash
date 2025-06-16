@@ -9,6 +9,7 @@
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
     "inquirer": "^7.1.0",
+    "keytar": "^7.9.0",
     "minimist": "^1.2.8",
     "path": "^0.12.7",
     "progress": "^2.0.3",

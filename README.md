@@ -55,6 +55,8 @@ Available options:
 - `--n`: the name scheme of the downloaded images (0 for `authorname-randomstring`, 1 for numbered list)
 - `--j`: whether you want to generate a credits file.
 - `--k`: your Unsplash API key.
+- `--s`: whether you want to save the API key with *keytar* for future use.
+- `--r`: if you want to wipe the saved API key from *keytar*.
 
 ---
 

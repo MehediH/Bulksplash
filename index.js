@@ -5,7 +5,9 @@ const https = require('https');
 const path = require('path');
 const ProgressBar = require('progress');
 const inquirer = require('inquirer');
+const keytar = require('keytar');
 const { firstQuestions, nextQuestions } = require('./questions');
+const { SERVICE, ACCOUNT } = require('./consts');
 
 const bulksplash = async (args) => {
   let basePath = '';
@@ -13,8 +15,19 @@ const bulksplash = async (args) => {
   const options = {};
 
   const ask = async () => {
-    await inquirer
-      .prompt([
+    let initialPrompts = [];
+    let apiKey = '';
+
+    try {
+      apiKey = await keytar.getPassword(SERVICE, ACCOUNT);
+    } catch (error) {
+      console.error(
+        '🚨 Error while retrieving the API key. Please try again or save it manually | ' + error.message
+      );
+    }
+
+    if (!apiKey) {
+      initialPrompts.push(
         {
           type: 'input',
           name: 'apiKey',
@@ -22,25 +35,49 @@ const bulksplash = async (args) => {
         },
         {
           type: 'input',
-          name: 'path',
-          message: '📂 Which directory do you want to save to?',
-          default: '.',
-        },
-        {
-          type: 'list',
-          name: 'random',
-          message: '📸 Which images do you want to download?',
-          choices: ['Random', 'From a collection'],
-          filter: function (val) {
-            return val === 'Random';
-          },
-        },
-      ])
+          name: 'shouldSaveApiKey',
+          message: '💾 Do you want to save the API key for future use? (y/n)',
+          validate: input => ['y', 'n'].includes(input.toLowerCase()) || 'Please enter y or n',
+          default: 'n',
+        }
+      );
+    }
+
+    // Common prompts
+    initialPrompts.push(
+      {
+        type: 'input',
+        name: 'path',
+        message: '📂 Which directory do you want to save to?',
+        default: '.',
+      },
+      {
+        type: 'list',
+        name: 'random',
+        message: '📸 Which images do you want to download?',
+        choices: ['Random', 'From a collection'],
+        filter: val => val === 'Random',
+      }
+    );
+
+    await inquirer
+      .prompt(initialPrompts)
       .then((answers) => {
         options.random = answers.random;
         options.apiKey = answers.apiKey;
+        options.shouldSaveApiKey = answers.shouldSaveApiKey === 'y';
         basePath = answers.path === '.' ? '' : answers.path;
       });
+
+    if (options.shouldSaveApiKey) {
+      try {
+        await keytar.setPassword(SERVICE, ACCOUNT, options.apiKey);
+      } catch (error) {
+        console.error(
+          '🚨 Error while saving the API key. Please try again or save it manually | ' + error.message
+        );
+      }
+    }
 
     if (options.random) {
       // random
@@ -150,6 +187,35 @@ const bulksplash = async (args) => {
     options.featured = args.f ? args.f : false;
     options.nameScheme = args.n ? 0 : 1;
     options.saveCredits = args.j ? args.j : false;
+    options.shouldSaveApiKey = args.s ? args.s : false;
+    options.shouldWipeApiKey = args.r ? args.r : false;
+
+    if (options.shouldWipeApiKey) {
+      try {
+        keytar.deletePassword(SERVICE, ACCOUNT);
+        console.log('✅ API key has been deleted successfully.');
+      }
+      catch (error) {
+        console.error(
+          '🚨 Error while deleting the API key. Please try again or save it manually | ' + error.message
+        );
+      }
+    }
+
+    if (options.shouldSaveApiKey && !options.apiKey) {
+      console.error(
+        '🚨 You need to provide an API key with the --k flag or save it manually.'
+      );
+      return;
+    } else if (options.shouldSaveApiKey) {
+      try {
+        keytar.setPassword(SERVICE, ACCOUNT, options.apiKey);
+      } catch (error) {
+        console.error(
+          '🚨 Error while saving the API key. Please try again or save it manually | ' + error.message
+        );
+      }
+    }
   } else {
     await ask();
   }
